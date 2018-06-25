@@ -30,19 +30,31 @@ i think we don't need any other advanced technology, then we can get the whole d
 but data will be expired in one month or...
 we cannot collect the data commented last year.
 
-
-
-
 **************************************************************************************************************************************************************************************************************************************************************************************
+
 DOUBAN
-
-
+I mainly use selenium to collect the user rating behaviors from douban website.
+1. use all.py to collect the movie information including name, genre, actors and etc. Then save the data into 
+onlycompletefinal.txt
+2. use recentcomments.py to collect the user behaviours.
+url="https://movie.douban.com/subject/"+str(movieid)+"/comments?status=P"
+delete the useless html attributr.
+ non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
+                         
+3. split the timestamp to year, month and day, which can be easier to search the records based on time.
 
 **************************************************************************************************************************************************************************************************************************************************************************************
 WEIBO
+In this part, I mainly collect the blogs under the specific movie title in https://m.weibo.cn using the same method as maoyan to find the json address. The address as follows:
+https://m.weibo.cn/api/container/getIndex?type=all&queryVal="+movieName+"&featurecode=20000320&luicode=10000011&lfid=100103type%3D1%26q%3D"+movieName+"&title="+movieName+"&containerid=100103type%3D1%26q%3D"+movieName+"&page="+str(i) where i represents the number of index.
 
-
-
+Pattern=re.compile(u"<(.*)>")
+                        line=''
+                        non_bmp_map = dict.fromkeys(range(0x10000, sys.maxunicode + 1), 0xfffd)
+                        text=jss['mblog']['text'].translate(non_bmp_map)
+                        if(len(Pattern.sub(r'',text))>=3):
+                            line= str(jss['mblog']['id'])+'\t'+str(jss['mblog']['created_at'])+'\t'+str(Pattern.sub(r'',text))
+There are lots of emoji in blogs which cannot be controled in python. In that case, I deleted directloy those emoji in the data preparation process using the below codes. 
 **************************************************************************************************************************************************************************************************************************************************************************************
 
 
